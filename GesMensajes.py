@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 
 class GesMensajes:
-    def __init__(self, root, funciones=None):
+    def __init__(self, root, funciones):
         self.root = root
         self.fn = funciones
         self.bandera = False
@@ -42,9 +42,9 @@ class GesMensajes:
         self.tablaListMsg.heading("col2", text="Sistema", anchor="center")
         self.tablaListMsg.pack(pady=25)
 
-        # 
+        self.llenar_tabla_msg()
 
-        self.btnCargarInstrucciones = tk.Button(self.FrameTabla, text="Cargar instrucciones", height= 1, width=15, padx=10, font=("bebas",15), bg="white")
+        self.btnCargarInstrucciones = tk.Button(self.FrameTabla, text="Cargar instrucciones", height= 1, width=15, padx=10, font=("bebas",15), bg="white", command = self.mensaje_seleccionado)
         self.btnCargarInstrucciones.pack()
 
         Label_Instrucciones = tk.Label( self.FrameTabla, text="=================== Lista de instrucciones ===================", font=("bebas",15), bg="orange", pady=30, fg="white")
@@ -65,7 +65,7 @@ class GesMensajes:
         self.Frame_mensaje.config(width=625, height=750)
         self.Frame_mensaje.grid(row=0, column=1)
 
-        self.btnProcesar = tk.Button(self.FrameTabla, text="Procesar mensaje", height= 1, width=15, padx=10,font=("bebas",15), bg="white")
+        self.btnProcesar = tk.Button(self.FrameTabla, text="Procesar mensaje", height= 1, width=15, padx=10,font=("bebas",15), bg="white", command = self.procesar)
         self.btnProcesar.pack(pady=25)
 
         self.FrameDatos = tk.Frame(self.Frame_mensaje,bg="orange")
@@ -96,5 +96,56 @@ class GesMensajes:
         self.Tiempo = tk.Entry(self.FrameDatos, width=15, font=("bebas",15), justify="left", state="readonly", textvariable=self.tiempo)
         self.Tiempo.grid(row=3, column=1)
 
-        self.graficar = tk.Button(self.Frame_mensaje, text="Generar grafica",  height= 1, width=15, padx=10, font=("bebas",15), bg="white")
+        self.graficar = tk.Button(self.Frame_mensaje, text="Generar grafica",  height= 1, width=15, padx=10, font=("bebas",15), bg="white", command = self.graficar)
         self.graficar.pack()
+
+    def llenar_tabla_msg(self):
+        lista_msg = self.fn.obtener_lista_mensajes()
+        if lista_msg.obtener_size() != 0:
+            for index, msg in enumerate(lista_msg):
+                self.tablaListMsg.insert("", "end", text=f"{index+1}", values=(f"{msg.nombre_msg}",f"{msg.sistema}"))
+
+    def mensaje_seleccionado(self):
+        self.limpiar_tabla(self.tablaInstrucciones)
+        item_seleccionado = self.tablaListMsg.focus()
+        if item_seleccionado:
+            datos = self.tablaListMsg.item(item_seleccionado)
+            lista_msg = self.fn.obtener_lista_instrucciones_por_mensaje(datos.get("values")[0])
+            for index, ins in enumerate(lista_msg.instrucciones):
+                self.tablaInstrucciones.insert("", "end", text=f"{index+1}", values=(f"{ins.dron}",f"{ins.instruccion}"))
+        else :
+            messagebox.showerror("Error", "Debes seleccinar un mensaje", parent = self.ventana)
+
+    def graficar(self):
+        item_seleccionado = self.tablaListMsg.focus()
+        if self.bandera:
+            if item_seleccionado:
+                datos = self.tablaListMsg.item(item_seleccionado)
+                self.fn.graficar_movimientos(datos.get("values")[0])
+                messagebox.showinfo("Exito", "Grafica generada con exito", parent = self.ventana)
+            else :
+                messagebox.showerror("Error", "Debes seleccinar un mensaje", parent = self.ventana)
+        else :
+                messagebox.showerror("Error", "Debes procesar un mensaje", parent = self.ventana)
+
+    def procesar(self):
+        item_seleccionado = self.tablaListMsg.focus()
+        if item_seleccionado:
+            datos = self.tablaListMsg.item(item_seleccionado)
+            nombre_sistema, mensaje, tiempo_op = self.fn.formar_mensaje(datos.get("values")[0])
+            self.nombre.set(nombre_sistema)
+            self.llenar_mensaje(mensaje)      
+            self.tiempo.set(tiempo_op)
+            self.bandera = True     
+        else :
+            messagebox.showerror("Error", "Debes seleccinar un mensaje", parent = self.ventana)
+
+    def llenar_mensaje(self, mensaje):
+        self.mensaje.config(state="normal")
+        self.mensaje.delete("1.0", tk.END)
+        self.mensaje.insert("1.0", mensaje)
+        self.mensaje.config(state="disabled")
+
+    def limpiar_tabla(self, table):
+        for items in table.get_children():
+            table.delete(items)

@@ -1,0 +1,55 @@
+digraph G {
+                    charset="UTF-8"
+
+                    a1 [ shape="none" fontname="bebas" label=<
+
+                        <TABLE border="0" cellspacing="0.5" cellpadding="10" bgcolor="black">
+<TR><TD colspan="4" border="1" bgcolor="#FF5B0E">msg</TD></TR>
+<TR>
+<TD border="1" bgcolor="red">Tiempo</TD><TD border="1" bgcolor="orange">DronX</TD>
+<TD border="1" bgcolor="orange">DronY</TD>
+<TD border="1" bgcolor="orange">DronZ</TD>
+</TR><TR>
+<TD border="1" bgcolor="red">1</TD>
+<TD border="1" bgcolor="orange">Subir</TD>
+<TD border="1" bgcolor="orange">Subir</TD>
+<TD border="1" bgcolor="orange">Subir</TD>
+</TR>
+<TR>
+<TD border="1" bgcolor="red">2</TD>
+<TD border="1" bgcolor="orange">Subir</TD>
+<TD border="1" bgcolor="orange">Subir</TD>
+<TD border="1" bgcolor="orange">Subir</TD>
+</TR>
+<TR>
+<TD border="1" bgcolor="red">3</TD>
+<TD border="1" bgcolor="orange">Emitir luz</TD>
+<TD border="1" bgcolor="orange">Subir</TD>
+<TD border="1" bgcolor="orange">Esperar</TD>
+</TR>
+<TR>
+<TD border="1" bgcolor="red">4</TD>
+<TD border="1" bgcolor="orange">Esperar</TD>
+<TD border="1" bgcolor="orange">Emitir luz</TD>
+<TD border="1" bgcolor="orange">Esperar</TD>
+</TR>
+<TR>
+<TD border="1" bgcolor="red">5</TD>
+<TD border="1" bgcolor="orange">Esperar</TD>
+<TD border="1" bgcolor="orange">Bajar</TD>
+<TD border="1" bgcolor="orange">Emitir luz</TD>
+</TR>
+<TR>
+<TD border="1" bgcolor="red">6</TD>
+<TD border="1" bgcolor="orange">Esperar</TD>
+<TD border="1" bgcolor="orange">Bajar</TD>
+<TD border="1" bgcolor="orange">Esperar</TD>
+</TR>
+<TR>
+<TD border="1" bgcolor="red">7</TD>
+<TD border="1" bgcolor="orange">Esperar</TD>
+<TD border="1" bgcolor="orange">Emitir luz</TD>
+<TD border="1" bgcolor="orange">Esperar</TD>
+</TR>
+</TABLE>>]
+}

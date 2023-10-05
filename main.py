@@ -7,11 +7,14 @@ from tkinter import messagebox
 from GesDrones import GesDrones
 from GesSistemaDrones import GesSistemaDrones
 from GesMensajes import GesMensajes
+from funciones import funciones 
+
 
 class main:
     def __init__(self, root):
         self.root = root
         self.flag = False
+        self.funciones = funciones()
 
         self.root.title("Interfaz")
         self.root.resizable(0,0)
@@ -27,10 +30,10 @@ class main:
         self.label = Label(text="PROYECTO 2 - IPC2 - SECCION D" , font=("bebas",12), bg="white", fg="black" )  
         self.label.pack(side=TOP, fill=X, padx=10, pady=25)
 
-        self.boton_inicializar = Button(root, text="Inicializar" ,font=("bebas",12), bg="white", fg="black", height=1, width=25 , padx=10, pady=10)
+        self.boton_inicializar = Button(root, text="Inicializar" ,font=("bebas",12), bg="white", fg="black", height=1, width=25 , padx=10, pady=10, command = self.inicializar_sistema)
         self.boton_cargar_archivo = Button(root, text="Cargar archivo de entrada" ,font=("bebas",12), bg="white", fg="black", height=1, width=25 , padx=10, pady=10, command = self.cargar_archivo)
-        self.boton_procesar = Button(root, text="Procesar" ,font=("bebas",12), bg="white", fg="black", height=1, width=25 , padx=10, pady=10)
-        self.boton_generar_archivo = Button(root, text="Generar archivo de salida" ,font=("bebas",12), bg="white", fg="black", height=1, width=25 , padx=10, pady=10)
+        self.boton_procesar = Button(root, text="Procesar" ,font=("bebas",12), bg="white", fg="black", height=1, width=25 , padx=10, pady=10, command = self.procesar_archivo)
+        self.boton_generar_archivo = Button(root, text="Generar archivo de salida" ,font=("bebas",12), bg="white", fg="black", height=1, width=25 , padx=10, pady=10, command = self.generar_xml)
         self.boton_GesDrones = Button(root, text="Gestion de drones" ,font=("bebas",12), bg="white", fg="black", height=1, width=25 , padx=10, pady=10, command = self.GesDrones)
         self.boton_GesSistemaDrones = Button(root, text="Gestion de sistemas de drones" ,font=("bebas",12), bg="white", fg="black", height=1, width=25 , padx=10, pady=10, command = self.GesSistemaDrones)
         self.boton_GesMensajes = Button(root, text="Gestion de mensajes" ,font=("bebas",12), bg="white", fg="black", height=1, width=25 , padx=10, pady=10, command = self.GesMensajes)
@@ -69,16 +72,41 @@ class main:
 
     # funcion gestion de drones
     def GesDrones(self):
-        ventana = GesDrones(self.root)
+        lista_dron = self.funciones.obtener_lista_drones()
+        ventana = GesDrones(self.root, lista_dron, self.funciones)
 
     # funcion gestion de sistema de drones
     def GesSistemaDrones(self):
-        ventana = GesSistemaDrones(self.root) 
-        
+        ventana = GesSistemaDrones(self.root, self.funciones, self.flag) 
+
     # funcion gestion de mensajes
     def GesMensajes(self):
-        ventana = GesMensajes(self.root) 
+        ventana = GesMensajes(self.root, self.funciones) 
 
+    def generar_xml(self):
+        if self.flag:
+            self.funciones.generar_xml()
+            messagebox.showinfo("Exito!", "Archivo generado correctamente.")
+        else:
+            messagebox.showwarning("Error!", "Debes de procesar un archivo antes.")
+
+    def inicializar_sistema(self):
+        self.funciones.inicializar_sistema()
+        messagebox.showinfo("Exito!", "Sistema inicializado correctamente.")
+
+    def procesar_archivo(self):
+        if self.archivo:
+            self.funciones.leer_xml(self.archivo)
+            self.flag = True
+            messagebox.showinfo("Exito!", "Archivo procesado correctamente.")
+        else:
+            messagebox.showwarning("Error!", "Debes de cargar un archivo antes.")
+
+    def generar_grafica(self):
+        if self.flag == True:
+            self.funciones.generar_grafica_sistemas()
+        else :
+            messagebox.showwarning("Error!", "Debes de procesar el archivo.")
 
 
 root = Tk()
